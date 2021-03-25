@@ -1,16 +1,16 @@
-import Club from "./club";
+import Club from "./Club";
 
 class User {
   name: string;
   grade: string;
-  clubs: Club[];
+  clubs: string[]
   email: string;
   username: string;
 
   constructor(
     name: string,
     grade: string,
-    clubs: Club[],
+    clubs: string[],
     email: string,
     username: string
   ) {
