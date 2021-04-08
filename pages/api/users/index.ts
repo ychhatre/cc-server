@@ -9,7 +9,6 @@ const handler = async (req, res) => {
         clubs: [],
         clubsBoard: [],
         email: req.body.email,
-        username: req.body.username,
       });
       return res.status(201).send({ status: "success", user});
     } catch (error) {
