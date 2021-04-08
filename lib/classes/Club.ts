@@ -7,6 +7,7 @@ class Club {
   advisor: string;
   advisorEmail: string;
   description: string;
+  imageURL: string;
   id: string;
 
   constructor(
@@ -16,6 +17,7 @@ class Club {
     creatorEmail: string,
     advisor: string,
     advisorEmail: string,
+    imageURL: string,
     id: string
   ) {
     this.name = name;
@@ -24,11 +26,12 @@ class Club {
     this.creatorEmail = creatorEmail;
     this.advisor = advisor;
     this.advisorEmail = advisorEmail;
+    this.imageURL = imageURL; 
     this.id = id;
   }
 
-  static async fromDocSnapshot(clubID: string): Promise<Club> {
-    const data = (await db.collection("clubs").doc(clubID).get()).data();
+  static fromDocSnapshot(doc: FirebaseFirestore.DocumentSnapshot): Club {
+    const data = doc.data(); 
     return new Club(
       data.name,
       data.room,
@@ -36,6 +39,7 @@ class Club {
       data.creatorEmail,
       data.advisor,
       data.advisorEmail,
+      data.imageURL,
       data.id
     );
   }
