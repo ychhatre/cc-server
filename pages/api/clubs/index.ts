@@ -2,6 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import ClubView from "../../../lib/classes/ClubView";
 import { db } from "../../../lib/firebase/config";
 import * as admin from "firebase-admin";
+import { Club } from "../../../models/club";
+import mongoose from "mongoose";
+import dbConnect from "../../../utils/dbConnect";
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
     if (req.query.all) {
@@ -30,47 +34,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method == "POST") {
     try {
-      const newClub = await db.collection("clubs").add({
+      const newClub = new Club({
         name: req.body.name,
-        room: req.body.room,
-        creator: req.body.creator,
-        creatorEmail: req.body.creatorEmail,
-        advisor: req.body.advisor,
-        advisorEmail: req.body.advisorEmail,
         description: req.body.description,
+        room: req.body.room,
+        advisor: mongoose.Types.ObjectId(req.body.advisor),
+        // school: mongoose.Types.ObjectId(req.body.school),
         imageURL: req.body.imageURL,
-        boardMembers: req.body.boardMembers,
-        members: [],
+        approved: req.body.boardMembers,
+        meetingTime: req.body.meetingTime,
       });
-      await db
-        .collection("admin")
-        .doc("notApprovedPhase1")
-        .update({
-          notApprovedPhase1: admin.firestore.FieldValue.arrayUnion({
-            ID: newClub.id,
-            name: req.body.name,
-            description: req.body.description,
-            room: req.body.room,
-            imageURL: req.body.imageURL,
-          }),
-        });
-      await db
-        .collection("clubs")
-        .doc("clubsView")
-        .update({
-          clubsView: admin.firestore.FieldValue.arrayUnion({
-            ID: newClub.id,
-            name: req.body.name,
-            description: req.body.description,
-            room: req.body.room,
-            imageURL: req.body.imageURL,
-          }),
-        });
+      await newClub.save();
       return res.status(201).send({ club: newClub });
     } catch (error) {
-      return res.status(502).send({ error }); 
+      return res.status(502).send({ error });
     }
   }
 };
 
-export default handler;
+export default dbConnect(handler);
