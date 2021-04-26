@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import ClubView from "../../../lib/classes/ClubView";
 import { db } from "../../../lib/firebase/config";
 import * as admin from "firebase-admin";
 import { Club } from "../../../models/club";
