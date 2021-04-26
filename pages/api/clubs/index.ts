@@ -27,6 +27,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       }
       return res.status(200).send(usersClubs);
+    } else {
+      const allClubs = (
+        await db.collection("clubview").doc("clubs").get()
+      ).data().clubs;
+      const finalClubs: ClubView[] = allClubs.map((clubObject) =>
+        ClubView.fromJson(clubObject)
+      );
+      return res.status(200).send(finalClubs); 
     }
   } else if (req.method == "POST") {
     try {

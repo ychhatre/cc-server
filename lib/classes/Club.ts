@@ -17,6 +17,7 @@ class Club {
     creatorEmail: string,
     advisor: string,
     advisorEmail: string,
+    description: string,
     imageURL: string,
     id: string
   ) {
@@ -26,12 +27,13 @@ class Club {
     this.creatorEmail = creatorEmail;
     this.advisor = advisor;
     this.advisorEmail = advisorEmail;
-    this.imageURL = imageURL; 
+    this.description = description;
+    this.imageURL = imageURL;
     this.id = id;
   }
 
   static fromDocSnapshot(doc: FirebaseFirestore.DocumentSnapshot): Club {
-    const data = doc.data(); 
+    const data = doc.data();
     return new Club(
       data.name,
       data.room,
@@ -39,10 +41,11 @@ class Club {
       data.creatorEmail,
       data.advisor,
       data.advisorEmail,
+      data.description,
       data.imageURL,
       data.id
     );
   }
 }
 
-export default Club; 
+export default Club;
