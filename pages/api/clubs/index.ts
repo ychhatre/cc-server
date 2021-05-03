@@ -1,12 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../lib/firebase/config";
-import * as admin from "firebase-admin";
-import { Club } from "../../../models/club";
+import IClub, { Club } from "../../../models/club";
 import mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
+    if (req.query.memberOf) {
+      const clubs: IClub[] = await Club.find({
+        members: { $in: [`${mongoose.Types.ObjectId(req.query.memberOf.toString())}`] },
+      });
+      return res.status(200).send(clubs);
+    } else {
+      return res.status(200).send(await Club.find({}));
+    }
     // if (req.query.all) {
     //   const approvedClubsDoc = await db
     //     .collection("admin")
@@ -37,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     //   const finalClubs: ClubView[] = allClubs.map((clubObject) =>
     //     ClubView.fromJson(clubObject)
     //   );
-    //   return res.status(200).send(finalClubs); 
+    //   return res.status(200).send(finalClubs);
     // }
   } else if (req.method == "POST") {
     try {

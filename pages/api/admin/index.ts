@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import ClubView from "../../../lib/classes/ClubView";
 import { db } from "../../../lib/firebase/config";
 import * as admin from "firebase-admin";
-import Club from "../../../lib/classes/Club";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
     if (req.query.clubStatus == "approved") {

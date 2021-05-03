@@ -10,7 +10,7 @@ export default interface IUser extends mongoose.Document {
     schoolID: ISchool
 }
 
-var user = new Schema({
+const user = new Schema({
   name: {
     type: String,
     required: true
@@ -36,5 +36,5 @@ var user = new Schema({
   }
 });
 
-export const User = mongoose.models.User || mongoose.model('User', user);
+export const User = mongoose.models.User || mongoose.model<IUser>("User", user);
 

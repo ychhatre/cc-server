@@ -81,6 +81,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // }
   } else if (req.method == "PATCH") {
     try {
+
       const newClub = await db.collection("clubs").doc(id.toString()).update({
         name: req.body.name,
         description: req.body.description,

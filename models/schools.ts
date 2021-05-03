@@ -26,4 +26,4 @@ const school: mongoose.Schema = new mongoose.Schema({
     }
 })
 
-export const School = mongoose.model<ISchool>("School", school); 
+export const School = mongoose.models.School || mongoose.model<ISchool>("School", school); 
