@@ -5,9 +5,6 @@ import mongoose from "mongoose";
 const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
-      // const id = new ObjectID(req.body.uid)
-      // console.log('id:', id); 
-    
       const user = new User({
         // _id: id,
         name: req.body.name,
@@ -22,8 +19,7 @@ const handler = async (req, res) => {
       console.error(error);
       return res.status(502).send({ error });
     }
-    
+  }
 };
 
 export default dbConnect(handler);
-
