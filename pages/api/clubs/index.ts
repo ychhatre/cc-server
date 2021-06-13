@@ -39,7 +39,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           approved: false,
           meetingTime: req.body.meetingTime,
           memberCount: 1,
-          boardMembers: [mongoose.Types.ObjectId(req.body.studentCreator)],
+          boardMembers: {"creator": mongoose.Types.ObjectId(req.body.studentCreator)},
           members: [mongoose.Types.ObjectId(req.body.studentCreator)],
         });
         const finalClub = await newClub.save();

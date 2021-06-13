@@ -6,8 +6,8 @@ export default interface IClub extends mongoose.Document {
   description: string;
   room: string;
   imageURL: string;
-  advisor: IUser
-  boardMembers: IUser[] | string[];
+  advisor: IUser;
+  boardMembers: Map<string, IUser>;
   members: IUser[] | string[]; 
   schoolID: string;
   approved: boolean;
@@ -38,12 +38,8 @@ var club = new mongoose.Schema({
   },
   boardMembers: {
     required: true,
-    type: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    type: Map,
+    of: String
   },
   members: {
     required: true,

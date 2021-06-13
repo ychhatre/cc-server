@@ -1,6 +1,6 @@
 import dbConnect from "../../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
-import { School } from "../../../models/schools"; 
+import { School } from "../../../models/school"; 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if(req.method == "POST") {
         try {
