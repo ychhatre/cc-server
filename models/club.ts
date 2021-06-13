@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import IUser from "./user";
+import ISchool from "./school";
 
 export default interface IClub extends mongoose.Document {
   name: string;
@@ -9,7 +10,7 @@ export default interface IClub extends mongoose.Document {
   advisor: IUser;
   boardMembers: Map<string, IUser>;
   members: IUser[] | string[]; 
-  schoolID: string;
+  schoolID: ISchool | string;
   approved: boolean;
   meetingTime: string;
   memberCount: number

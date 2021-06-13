@@ -1,35 +1,35 @@
-import mongoose from 'mongoose';
-import ISchool from "./school"
-import IClub from "./club"
+import mongoose from "mongoose";
+import ISchool from "./school";
+import IClub from "./club";
 var Schema = mongoose.Schema;
 
 export default interface IAnnouncement extends mongoose.Document {
-    clubID: IClub
-    announcementTitle: string
-    announcementContent: string
-    schoolID: ISchool
+  clubID: IClub | string;
+  title: string;
+  content: string;
+  schoolID: ISchool | string;
 }
 
 const announcement = new Schema({
   clubID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Club",
-    required: true
   },
-  announcementTitle: {
+  title: {
     type: String,
-    required: true
+    required: true,
   },
-  announcementContent: {
+  content: {
     type: String,
-    required: true
+    required: true,
   },
   schoolID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "School",
-    required: true
+    required: true,
   },
 });
 
-export const Annnouncement = mongoose.models.Announcement || mongoose.model<IAnnouncement>("Announcement", announcement);
-
+export const Announcement =
+  mongoose.models.Announcment ||
+  mongoose.model<IAnnouncement>("Announcement", announcement);
