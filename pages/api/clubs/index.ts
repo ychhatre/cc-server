@@ -1,76 +1,59 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import ClubView from "../../../lib/classes/ClubView";
-import { db } from "../../../lib/firebase/config";
-import * as admin from "firebase-admin";
+import IClub, { Club } from "../../../models/club";
+import mongoose from "mongoose";
+import dbConnect from "../../../utils/dbConnect";
+import IUser, { User } from "../../../models/user";
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
-    if (req.query.all) {
-      const approvedClubsDoc = await db
-        .collection("admin")
-        .doc("approved")
-        .get();
-      const clubsArray = approvedClubsDoc.data().approved;
-      const finalClubs: ClubView[] = clubsArray.map((clubObject) =>
-        ClubView.fromJson(clubObject)
-      );
-      return res.status(200).send(finalClubs);
-    } else if (req.query.memberOf) {
-      const memberUid: string = req.query.memberOf.toString();
-      const user = await db.collection("users").doc(memberUid).get();
-      const allClubs = (
-        await db.collection("clubview").doc("clubs").get()
-      ).data().clubs;
-      const usersClubs: ClubView[] = [];
-      for (let club of allClubs) {
-        if (user.data().clubs.contains(club.id)) {
-          usersClubs.push(club);
-        }
-      }
-      return res.status(200).send(usersClubs);
+    if (req.query.memberID) {
+      const user: IUser = await User.findOne({ uid: req.query.memberID.toString() });
+      const clubs: IClub[] = await Club.find({
+        members: {
+          $in: [`${mongoose.Types.ObjectId(user._id)}`],
+        },
+      });
+      return res.status(200).send(clubs);
+    } else if (req.query.notMemberID) {
+      const user: IUser = await User.findOne({ uid: req.query.notMemberID.toString() });
+      const clubs: IClub[] = await Club.find({
+        members: {
+          $nin: [
+            `${mongoose.Types.ObjectId(user._id)}`,
+          ],
+        },
+      });
+      return res.status(200).send(clubs);
     }
   } else if (req.method == "POST") {
     try {
-      const newClub = await db.collection("clubs").add({
-        name: req.body.name,
-        room: req.body.room,
-        creator: req.body.creator,
-        creatorEmail: req.body.creatorEmail,
-        advisor: req.body.advisor,
-        advisorEmail: req.body.advisorEmail,
-        description: req.body.description,
-        imageURL: req.body.imageURL,
-        boardMembers: req.body.boardMembers,
-        members: [],
-      });
-      await db
-        .collection("admin")
-        .doc("notApprovedPhase1")
-        .update({
-          notApprovedPhase1: admin.firestore.FieldValue.arrayUnion({
-            ID: newClub.id,
-            name: req.body.name,
-            description: req.body.description,
-            room: req.body.room,
-            imageURL: req.body.imageURL,
-          }),
+      const advisor: IUser = await User.findById(req.body.advisorID);
+      if (advisor.staff) {
+        const newClub = new Club({
+          name: req.body.name,
+          description: req.body.description,
+          room: req.body.room,
+          advisor: mongoose.Types.ObjectId(req.body.advisorID),
+          school: mongoose.Types.ObjectId(req.body.schoolID),
+          imageURL: req.body.imageURL,
+          approved: false,
+          meetingTime: req.body.meetingTime,
+          memberCount: 1,
+          boardMembers: [mongoose.Types.ObjectId(req.body.studentCreator)],
+          members: [mongoose.Types.ObjectId(req.body.studentCreator)],
         });
-      await db
-        .collection("clubs")
-        .doc("clubsView")
-        .update({
-          clubsView: admin.firestore.FieldValue.arrayUnion({
-            ID: newClub.id,
-            name: req.body.name,
-            description: req.body.description,
-            room: req.body.room,
-            imageURL: req.body.imageURL,
-          }),
+        const finalClub = await newClub.save();
+        return res.status(201).send({ club: finalClub });
+      } else {
+        return res.status(502).send({
+          status:
+            "The advisor is not a staff member, please try again with a different advisor",
         });
-      return res.status(201).send({ club: newClub });
+      }
     } catch (error) {
-      return res.status(502).send({ error }); 
+      return res.status(502).send({ error });
     }
   }
 };
 
-export default handler;
+export default dbConnect(handler);
