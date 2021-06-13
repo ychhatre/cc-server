@@ -7,7 +7,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const newSchool = new School({
                 name: req.body.name,
                 clubsManager: req.body.clubsManager,
-                schoolRepresentativeEmail: req.body.schoolRepresentativeEmail,
+                emailExtension: req.body.emailExtension,
                 schoolContactEmail: req.body.schoolContactEmail,
             })
             await newSchool.save(); 
@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         } catch (error) {
             return res.status(502).send({ error });
         }
-        
     }
 }
 

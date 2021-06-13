@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../../lib/firebase/config";
-import { User } from "../../../../models/user";
+import { auth } from "../../../../lib/firebase/config";
+import IUser, { User } from "../../../../models/user";
+import dbConnect from "../../../../utils/dbConnect"; 
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -8,7 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
   if (req.method == "GET") {
     try {
-      const user = await User.findOne({uid: uid.toString()}); 
+      const user:IUser = await User.findOne({uid: uid.toString()});
       return res.status(200).send(user); 
     } catch (error) {
       return res.status(502).send({error})
@@ -17,4 +18,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default dbConnect(handler);

@@ -6,13 +6,13 @@ const handler = async (req, res) => {
   if (req.method == "POST") {
     try {
       const user = new User({
-        // _id: id,
         name: req.body.name,
         email: req.body.email,
         graduationYear: req.body.graduationYear,
         staff: req.body.staff,
+        uid: req.body.uid,
         schoolID: mongoose.Types.ObjectId(req.body.schoolID),
-      });
+      })
       await user.save();
       return res.status(201).send({ status: "success" });
     } catch (error) {

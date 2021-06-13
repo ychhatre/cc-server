@@ -8,6 +8,7 @@ export default interface IUser extends mongoose.Document {
     graduationYear: number
     staff: boolean
     schoolID: ISchool
+    uid: string
 }
 
 const user = new Schema({
@@ -22,7 +23,7 @@ const user = new Schema({
   },
   graduationYear: {
     type: Number,
-    required: true
+    required: false
   },
   staff: {
     type: Boolean,
@@ -33,6 +34,11 @@ const user = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "School",
     required: true
+  },
+  uid: {
+    required: true,
+    type: String,
+    unique: true
   }
 });
 

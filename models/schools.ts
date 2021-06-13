@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export default interface ISchool extends mongoose.Document {
     name: string 
     clubsManager: string[]
-    schoolRepresentativeEmail: string
+    emailExtension: string
     schoolContactEmail: string
 }
 
@@ -16,7 +16,7 @@ const school: mongoose.Schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    schoolRepresentativeEmail: {
+    emailExtension: {
         type: String,
         required: true
     },
