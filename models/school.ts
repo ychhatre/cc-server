@@ -1,10 +1,10 @@
 import mongoose from "mongoose"; 
 
 export default interface ISchool extends mongoose.Document {
-    name: string 
-    clubsManager: string[]
-    emailExtension: string
-    schoolContactEmail: string
+    name: string;
+    clubsManager: string;
+    emailExtension: string;
+    schoolContactEmail: string;
 }
 
 const school: mongoose.Schema = new mongoose.Schema({

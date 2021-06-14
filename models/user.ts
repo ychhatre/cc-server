@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import ISchool from "./schools"
+import ISchool from "./school"
 var Schema = mongoose.Schema;
 
 export default interface IUser extends mongoose.Document {

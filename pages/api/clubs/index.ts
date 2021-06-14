@@ -28,6 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (req.method == "POST") {
     try {
       const advisor: IUser = await User.findById(req.body.advisorID);
+      const studentCreator: IUser = await User.findOne({ uid: req.body.studentCreator });
       if (advisor.staff) {
         const newClub = new Club({
           name: req.body.name,
@@ -39,8 +40,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           approved: false,
           meetingTime: req.body.meetingTime,
           memberCount: 1,
-          boardMembers: [mongoose.Types.ObjectId(req.body.studentCreator)],
-          members: [mongoose.Types.ObjectId(req.body.studentCreator)],
+          boardMembers: {"creator": mongoose.Types.ObjectId(studentCreator._id)},
+          members: [mongoose.Types.ObjectId(studentCreator._id)],
+          timestamp: Date.now()/1000
         });
         const finalClub = await newClub.save();
         return res.status(201).send({ club: finalClub });

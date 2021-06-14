@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import IClub, { Club } from "../../../models/club";
-import mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -25,6 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method === "PATCH") {
     if (req.query.approvePhase1) {
+      console.log(req.query.approvePhase1)
       await Club.updateOne(
         { _id: req.query.approvePhase1.toString() },
         {
