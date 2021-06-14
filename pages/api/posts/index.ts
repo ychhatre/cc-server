@@ -6,7 +6,7 @@ import IUser, { User } from "../../../models/user";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == "POST") {
-    const { clubID, title, content, schoolID } = req.body;
+    const { clubID, title, content, schoolID, imageURL } = req.body;
 
     const studentCreator: IUser = await User.findOne({ uid: req.body.studentCreator });
     const post = new Post({
@@ -14,6 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       title,
       content,
       likes: [],
+      imageURL: imageURL,
       studentCreator: mongoose.Types.ObjectId(studentCreator._id),
       schoolID: mongoose.Types.ObjectId(schoolID),
       timestamp: Date.now()/1000

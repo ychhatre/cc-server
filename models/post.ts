@@ -9,6 +9,7 @@ export default interface IPost extends mongoose.Document {
   title: string;
   content: string;
   likes: IUser[];
+  imageURL: string;
   studentCreator: IUser | string;
   schoolID: ISchool | string;
   timestamp: Number;
@@ -41,6 +42,9 @@ const post = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "School",
     required: true,
+  },
+  imageURL: {
+    type: String,
   },
   studentCreator: {
     type: mongoose.Schema.Types.ObjectId,
