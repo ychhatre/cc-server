@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import IUser from "./user";
-import ISchool from "./school";
 
 export default interface IClub extends mongoose.Document {
   name: string;
@@ -10,7 +9,7 @@ export default interface IClub extends mongoose.Document {
   advisor: IUser;
   boardMembers: Map<string, IUser>;
   members: IUser[] | string[]; 
-  schoolID: ISchool | string;
+  schoolID: string;
   approved: boolean;
   meetingTime: string;
   memberCount: number
@@ -40,7 +39,7 @@ var club = new mongoose.Schema({
   boardMembers: {
     required: true,
     type: Map,
-    of: String
+    of: mongoose.Types.ObjectId
   },
   members: {
     required: true,
@@ -70,5 +69,9 @@ var club = new mongoose.Schema({
     required: true,
     default: 0
   },
+  timestamp: {
+    required: true,
+    type: Number
+  }
 });
 export const Club = mongoose.models.Club || mongoose.model<IClub>("Club", club);

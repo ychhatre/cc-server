@@ -8,12 +8,13 @@ export default interface IAnnouncement extends mongoose.Document {
   title: string;
   content: string;
   schoolID: ISchool | string;
+  timestamp: Number
 }
 
 const announcement = new Schema({
   clubID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Club",
+    ref: "Club"
   },
   title: {
     type: String,
@@ -28,6 +29,10 @@ const announcement = new Schema({
     ref: "School",
     required: true,
   },
+  timestamp: {
+    required: true,
+    type: Number
+  }
 });
 
 export const Announcement =
