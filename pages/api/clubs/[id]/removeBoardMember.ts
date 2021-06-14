@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Club } from "../../../../models/club";
-import mongoose from "mongoose";
 import dbConnect from "../../../../utils/dbConnect";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Club } from "../../../../models/club";
+import IClub, { Club } from "../../../../models/club";
+import IUser, { User } from "../../../../models/user";
 import mongoose from "mongoose";
 import dbConnect from "../../../../utils/dbConnect";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -8,8 +9,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
   if (req.method == "PATCH") {
       try {
-        const club = await Club.findById(id.toString());
-        club.boardMembers.set(req.body.role, req.body.uid);
+        const club:IClub = await Club.findById(id.toString());
+        const currUser:IUser = await User.findOne({ uid: req.body.uid})
+        club.boardMembers.set(req.body.role, currUser._id)
         const finalClub = await Club.updateOne(
           { _id: id.toString() },
           {

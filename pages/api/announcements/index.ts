@@ -13,6 +13,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
     const finalAnnouncement = await announcement.save();
     return res.status(201).send(finalAnnouncement); 
+  } else if (req.method === "GET") {
+    const announcements = await Announcement.find({});
+    return res.status(200).send(announcements)
   }
 }
 

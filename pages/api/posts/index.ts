@@ -21,6 +21,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     });
     const finalPost = await post.save();
     return res.status(201).send(finalPost)
-  } 
+  }
 }
 export default dbConnect(handler);
