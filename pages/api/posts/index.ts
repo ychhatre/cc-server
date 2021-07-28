@@ -3,12 +3,10 @@ import dbConnect from "../../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import IUser, { User } from "../../../models/user";
+import { credentials } from "../../../utils/credentials";
 const AWS = require('aws-sdk');
 
-const s3 = new AWS.S3({
-  accessKeyId: '',
-  secretAccessKey: ''
-});
+const s3 = new AWS.S3(credentials);
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == "POST") {

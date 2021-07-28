@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Club } from "../../../../models/club";
 import mongoose from "mongoose";
+import { credentials } from "../../../../utils/credentials";
 const AWS = require('aws-sdk');
 
-const s3 = new AWS.S3({
-  accessKeyId: '',
-  secretAccessKey: ''
-});
+const s3 = new AWS.S3(credentials);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -33,7 +31,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             CreateBucketConfiguration: {
                 LocationConstraint: "us-east-2"
             },
-            Key: `${req.body.name}.jpg`,
+            Key: `${id.toString()}.jpg`,
             Body: req.body.logo
           };
   
