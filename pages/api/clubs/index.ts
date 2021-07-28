@@ -3,6 +3,17 @@ import IClub, { Club } from "../../../models/club";
 import mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 import IUser, { User } from "../../../models/user";
+import { HttpRequest } from "@aws-sdk/protocol-http";
+import { S3RequestPresigner } from "@aws-sdk/s3-request-presigner";
+import { parseUrl } from "@aws-sdk/url-parser";
+import { Hash } from "@aws-sdk/hash-node";
+import { formatUrl } from "@aws-sdk/util-format-url";
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+  accessKeyId: '',
+  secretAccessKey: ''
+});
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
@@ -13,7 +24,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           $in: [`${mongoose.Types.ObjectId(user._id)}`],
         },
       });
-      return res.status(200).send(clubs);
+      var logoUrls = []
+      for(var i = 0; i < clubs.length; i++){
+        const s3LogoObjectUrl = parseUrl(`https://club-central.s3.us-east-2.amazonaws.com/${clubs[i].name}.jpg`);
+
+        const presigner = new S3RequestPresigner({
+          credentials: {
+            accessKeyId: '',
+            secretAccessKey: ''
+          },
+          region: "us-east-2",
+          sha256: Hash.bind(null, "sha256")
+        });
+
+        const logoUrl = await presigner.presign(new HttpRequest(s3LogoObjectUrl));
+        logoUrls.push(formatUrl(logoUrl));
+      }
+      return res.status(200).send([clubs, logoUrls]);
     } else if (req.query.notMemberID) {
       const user: IUser = await User.findOne({ uid: req.query.notMemberID.toString() });
       const clubs: IClub[] = await Club.find({
@@ -23,7 +50,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ],
         },
       });
-      return res.status(200).send(clubs);
+      var logoUrls = []
+      for(var i = 0; i < clubs.length; i++){
+        const s3LogoObjectUrl = parseUrl(`https://club-central.s3.us-east-2.amazonaws.com/${clubs[i].name}.jpg`);
+
+        const presigner = new S3RequestPresigner({
+          credentials: {
+            accessKeyId: '',
+            secretAccessKey: ''
+          },
+          region: "us-east-2",
+          sha256: Hash.bind(null, "sha256")
+        });
+
+        const logoUrl = await presigner.presign(new HttpRequest(s3LogoObjectUrl));
+        logoUrls.push(formatUrl(logoUrl));
+      }
+      return res.status(200).send([clubs, logoUrls]);
     }
   } else if (req.method == "POST") {
     try {
@@ -36,7 +79,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           room: req.body.room,
           advisor: mongoose.Types.ObjectId(req.body.advisorID),
           school: mongoose.Types.ObjectId(req.body.schoolID),
-          imageURL: req.body.imageURL,
           approved: false,
           meetingTime: req.body.meetingTime,
           memberCount: 1,
@@ -45,7 +87,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           timestamp: Date.now()/1000
         });
         const finalClub = await newClub.save();
-        return res.status(201).send({ club: finalClub });
+        const params = {
+          Bucket: "club-central",
+          CreateBucketConfiguration: {
+              LocationConstraint: "us-east-2"
+          },
+          Key: `${finalClub._id}.jpg`,
+          Body: req.body.logo
+        };
+
+        s3.upload(params, function(err, data) {
+            if (err) {
+                throw err;
+            }
+            return res.status(201).send({ club: finalClub });
+        });
       } else {
         return res.status(502).send({
           status:
