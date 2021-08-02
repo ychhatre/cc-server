@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const s3LogoObjectUrl = parseUrl(`https://club-central.s3.us-east-2.amazonaws.com/${club._id}.jpg`);
 
     const presigner = new S3RequestPresigner({
-      credentials,
+      credentials: credentials,
       region: "us-east-2",
       sha256: Hash.bind(null, "sha256")
     });

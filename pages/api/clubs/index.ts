@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       var logoUrls = []
       for(var i = 0; i < clubs.length; i++){
-        const s3LogoObjectUrl = parseUrl(`https://club-central.s3.us-east-2.amazonaws.com/${clubs[i].name}.jpg`);
+        const s3LogoObjectUrl = parseUrl(`https://club-central.s3.us-east-2.amazonaws.com/${clubs[i]._id}.jpg`);
 
         const presigner = new S3RequestPresigner({
           credentials,
@@ -61,9 +61,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).send([clubs, logoUrls]);
     }
   } else if (req.method == "POST") {
+    console.log("sent")
     try {
       const advisor: IUser = await User.findById(req.body.advisorID);
       const studentCreator: IUser = await User.findOne({ uid: req.body.studentCreator });
+
       if (advisor.staff) {
         const newClub = new Club({
           name: req.body.name,
@@ -85,6 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               LocationConstraint: "us-east-2"
           },
           Key: `${finalClub._id}.jpg`,
+          ContentEncoding: 'base64',
           Body: req.body.logo
         };
 
