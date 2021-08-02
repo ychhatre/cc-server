@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         approved: true,
         memberCount: { $gte: 10 },
       });
-      var logoUrls = []
       for(var i = 0; i < clubs.length; i++){
         const s3LogoObjectUrl = parseUrl(`https://club-central.s3.us-east-2.amazonaws.com/${clubs[i]._id}.jpg`);
 
@@ -23,10 +22,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           credentials,
           region: "us-east-2",
           sha256: Hash.bind(null, "sha256")
+          
         });
-
-        const logoUrl = await presigner.presign(new HttpRequest(s3LogoObjectUrl));
-        logoUrls.push(formatUrl(logoUrl));
+        clubs[i].imageURL = formatUrl(await presigner.presign(new HttpRequest(s3LogoObjectUrl)));  
+      
       }
       return res.status(200).send([clubs, logoUrls]);
     } else if (req.query.clubStatus === "notApproved") {
