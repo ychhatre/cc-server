@@ -10,9 +10,9 @@ export const credentials = {
   secretAccessKey: "25jJnHIxaQs7P2zyJPIYTXrFlmWi9boGOQmoPSRD",
 };
 
-async function parseImage(clubID: string, club: IClub) {
+async function parseImage(club: IClub) {
   const s3LogoObjectUrl = parseUrl(
-    `https://club-central.s3.us-east-2.amazonaws.com/${clubID}.jpg`
+    `https://club-central.s3.us-east-2.amazonaws.com/${club._id}.jpg`
   );
 
   const presigner = new S3RequestPresigner({

@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
     const club = await Club.findById(id.toString()).populate("advisor");
 
-    const finalClub = await parseImage(club._id, club);
+    const finalClub = await parseImage(club);
 
     return res.status(200).send({club:finalClub});
   }

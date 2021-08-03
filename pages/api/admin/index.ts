@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       let finalClubs = []; 
       console.log(clubs.length); 
       for(var i = 0; i < clubs.length; i++){
-        finalClubs.push(await parseImage(clubs[i]._id, clubs[i]))
+        finalClubs.push(await parseImage(clubs[i]))
       }
       return res.status(200).send({clubs: finalClubs});
     } else if (req.query.clubStatus === "notApproved") {
@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       let finalClubs = []
       for(var i = 0; i < clubs.length; i++){
-        finalClubs.push(await parseImage(clubs[i]._id, clubs[i]))
+        finalClubs.push(await parseImage(clubs[i]))
       }
       return res.status(200).send({clubs: finalClubs});
     } else if (req.query.clubStatus === "approvedPhase1") {
@@ -33,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       let finalClubs = []
       for(var i = 0; i < clubs.length; i++){
-        finalClubs.push(await parseImage(clubs[i]._id, clubs[i]))
+        finalClubs.push(await parseImage(clubs[i]))
       }
       return res.status(200).send({clubs: finalClubs});
     }

@@ -7,7 +7,7 @@ import { S3RequestPresigner } from "@aws-sdk/s3-request-presigner";
 import { parseUrl } from "@aws-sdk/url-parser";
 import { Hash } from "@aws-sdk/hash-node";
 import { formatUrl } from "@aws-sdk/util-format-url";
-import { credentials } from '../../../utils/credentials'
+import { credentials } from '../../../utils/imageParser'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const posts = await Post.find({}, [], {

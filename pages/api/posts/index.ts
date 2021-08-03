@@ -3,7 +3,7 @@ import dbConnect from "../../../utils/dbConnect";
 import { NextApiRequest, NextApiResponse } from "next";
 import mongoose from "mongoose";
 import IUser, { User } from "../../../models/user";
-import { credentials } from "../../../utils/credentials";
+import { credentials } from "../../../utils/imageParser";
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3(credentials);
