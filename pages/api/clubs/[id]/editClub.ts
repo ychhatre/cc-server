@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Club } from "../../../../models/club";
 import mongoose from "mongoose";
-import { credentials } from "../../../../utils/credentials";
+import { credentials } from "../../../../utils/imageParser";
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3(credentials);
