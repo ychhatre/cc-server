@@ -13,6 +13,14 @@ const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3(credentials);
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+  },
+}
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
     if (req.query.memberID) {
@@ -80,8 +88,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           members: [mongoose.Types.ObjectId(studentCreator._id)],
           timestamp: Date.now()/1000
         });
-        let buf = Buffer.from(req.body.logo.replace(/^data:image\/\w+;base64,/, ""),'base64')
+
+        console.log(req.body.logo.substring(0, 40));
+
         const finalClub = await newClub.save();
+
+        const buf = Buffer.from(req.body.logo.replace(/^data:image\/jpg;base64,/, ""),'base64')
+
         const params = {
           Bucket: "club-central",
           CreateBucketConfiguration: {
