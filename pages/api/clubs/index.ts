@@ -61,12 +61,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).send([clubs, logoUrls]);
     }
   } else if (req.method == "POST") {
-    console.log("sent")
     try {
       const advisor: IUser = await User.findById(req.body.advisorID);
       const studentCreator: IUser = await User.findOne({ uid: req.body.studentCreator });
 
       if (advisor.staff) {
+        console.log(studentCreator)
         const newClub = new Club({
           name: req.body.name,
           description: req.body.description,
@@ -80,6 +80,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           members: [mongoose.Types.ObjectId(studentCreator._id)],
           timestamp: Date.now()/1000
         });
+        let buf = Buffer.from(req.body.logo.replace(/^data:image\/\w+;base64,/, ""),'base64')
         const finalClub = await newClub.save();
         const params = {
           Bucket: "club-central",
@@ -88,7 +89,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
           Key: `${finalClub._id}.jpg`,
           ContentEncoding: 'base64',
-          Body: req.body.logo
+          ContentType: 'image/jpeg',
+          Body: buf
         };
 
         s3.upload(params, function(err, data) {
