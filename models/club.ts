@@ -6,13 +6,14 @@ export default interface IClub extends mongoose.Document {
   description: string;
   room: string;
   imageURL: string;
-  advisor: IUser;
+  advisor: string;
   boardMembers: Map<string, IUser>;
   members: IUser[] | string[]; 
   schoolID: string;
   approved: boolean;
   meetingTime: string;
   memberCount: number
+  tags: string[]
 }
 
 var club = new mongoose.Schema({
@@ -32,8 +33,7 @@ var club = new mongoose.Schema({
     type: String,
   },
   advisor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: true,
   },
   boardMembers: {
@@ -72,6 +72,10 @@ var club = new mongoose.Schema({
   timestamp: {
     required: true,
     type: Number
+  },
+  tags: {
+    required: true, 
+    type: [String]
   }
 });
 export const Club = mongoose.models.Club || mongoose.model<IClub>("Club", club);

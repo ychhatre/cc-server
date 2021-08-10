@@ -3,16 +3,10 @@ import IClub, { Club } from "../../../models/club";
 import mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 import IUser, { User } from "../../../models/user";
-import { HttpRequest } from "@aws-sdk/protocol-http";
-import { S3RequestPresigner } from "@aws-sdk/s3-request-presigner";
-import { parseUrl } from "@aws-sdk/url-parser";
-import { Hash } from "@aws-sdk/hash-node";
-import { formatUrl } from "@aws-sdk/util-format-url";
 import { parseImage } from "../../../utils/imageParser";
 import { credentials } from "../../../utils/imageParser";
 const AWS = require("aws-sdk");
 const s3 = new AWS.S3(credentials);
-
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
@@ -27,9 +21,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       let finalClubs = [];
       for (var i = 0; i < clubs.length; i++) {
-        finalClubs.push(await parseImage(clubs[i]));
+        if(!Array.from(clubs[i].boardMembers.values()).includes(user)) {
+          finalClubs.push(await parseImage(clubs[i]));
+        }
       }
+
       return res.status(200).send({ clubs: finalClubs });
+    } else if (req.query.boardMemberID) {
+
     } else if (req.query.notMemberID) {
       const user: IUser = await User.findOne({
         uid: req.query.notMemberID.toString(),
@@ -55,7 +54,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       if (advisor.staff) {
-        console.log(studentCreator);
         const newClub = new Club({
           name: req.body.name,
           description: req.body.description,
@@ -70,6 +68,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
           members: [mongoose.Types.ObjectId(studentCreator._id)],
           timestamp: Date.now() / 1000,
+          tags: req.body.tags
         });
 
         console.log(req.body.logo.substring(0, 40));
