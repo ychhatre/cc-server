@@ -27,8 +27,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       return res.status(200).send({ clubs: finalClubs });
-    } else if (req.query.boardMemberID) {
-
     } else if (req.query.notMemberID) {
       const user: IUser = await User.findOne({
         uid: req.query.notMemberID.toString(),
