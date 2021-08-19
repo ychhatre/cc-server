@@ -12,6 +12,7 @@ const handler = async (req, res) => {
         staff: req.body.staff,
         uid: req.body.uid,
         schoolID: mongoose.Types.ObjectId(req.body.schoolID),
+        devtokens: req.body.devtokens
       })
       await user.save();
       return res.status(201).send({ status: "success" });
