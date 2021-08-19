@@ -9,6 +9,7 @@ export default interface IUser extends mongoose.Document {
     staff: boolean
     schoolID: ISchool
     uid: string
+    devtokens: string[]
 }
 
 const user = new Schema({
@@ -39,6 +40,10 @@ const user = new Schema({
     required: true,
     type: String,
     unique: true
+  },
+  devtokens: {
+    required: true,
+    type: [String]
   }
 });
 
