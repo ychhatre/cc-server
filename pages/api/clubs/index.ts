@@ -35,6 +35,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         uid: req.query.notMemberID.toString(),
       });
       const clubs: IClub[] = await Club.find({
+        approved: true,
         members: {
           $nin: [`${mongoose.Types.ObjectId(user._id)}`],
         },
