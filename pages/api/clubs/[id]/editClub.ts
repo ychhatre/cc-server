@@ -39,11 +39,49 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               if (err) {
                   throw err;
               }
-              return res.status(201).send({ club: finalClub });
+              if(typeof req.body.meetingnMinutes != "undefined"){
+                const params = {
+                  Bucket: "club-central",
+                  CreateBucketConfiguration: {
+                      LocationConstraint: "us-east-2"
+                  },
+                  Key: `${id.toString()}_min.jpg`,
+                  Body: req.body.meetingMinutes
+                };
+        
+                s3.upload(params, function(err, data) {
+                    if (err) {
+                        throw err;
+                    }
+                    return res.status(201).send({ club: finalClub });
+                });
+              }
+              else{
+                return res.status(200).send(finalClub);
+              }
           });
         }
         else{
-          return res.status(200).send(finalClub);
+          if(typeof req.body.meetingMinutes != "undefined"){
+            const params = {
+              Bucket: "club-central",
+              CreateBucketConfiguration: {
+                  LocationConstraint: "us-east-2"
+              },
+              Key: `${id.toString()}_min.jpg`,
+              Body: req.body.meetingMinutes
+            };
+    
+            s3.upload(params, function(err, data) {
+                if (err) {
+                    throw err;
+                }
+                return res.status(201).send({ club: finalClub });
+            });
+          }
+          else{
+            return res.status(200).send(finalClub);
+          }
         }
       } catch (error) {
         return res.status(502).send({ error });
