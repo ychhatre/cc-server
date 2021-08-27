@@ -6,7 +6,6 @@ export default interface IUser extends mongoose.Document {
     name: string
     email: string
     graduationYear: number
-    staff: boolean
     schoolID: ISchool
     uid: string
     devtokens: string[]
@@ -25,11 +24,6 @@ const user = new Schema({
   graduationYear: {
     type: Number,
     required: false
-  },
-  staff: {
-    type: Boolean,
-    default: false,
-    required: true
   },
   schoolID: {
     type: mongoose.Schema.Types.ObjectId,
