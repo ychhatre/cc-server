@@ -10,20 +10,6 @@ const s3 = new AWS.S3(credentials);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
-    if (req.query.test) {
-      let boardMembers = {
-        president: "chhatre7205@mydusd.org",
-        vp: "bhatnagar2273@mydusd.org",
-        treasurer: "kashyap2520@mydusd.org",
-      };
-      for (let [k, v] of Object.entries(boardMembers)) {
-        const user: IUser = await User.findOne({
-          email: v,
-        });
-        boardMembers[k] = user._id;
-      }
-      return res.status(200).send(boardMembers);
-    }
     if (req.query.memberID) {
       const user: IUser = await User.findOne({
         uid: req.query.memberID.toString(),
