@@ -106,13 +106,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ContentType: "image/jpeg",
           Body: buf,
         };
+
         s3.upload(params, function (err, data) {
           if (err) {
             throw err;
           }
         });
       }
-
       return res.status(201).send({ club: finalClub });
     } catch (error) {
       return res.status(502).send({ error });
