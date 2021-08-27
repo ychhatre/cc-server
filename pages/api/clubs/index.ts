@@ -34,6 +34,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: {
           $nin: [`${mongoose.Types.ObjectId(user._id)}`],
         },
+        boardMembers: {
+          $nin: [`${mongoose.Types.ObjectId(user._id)}`],
+        },
       });
 
       let finalClubs = [];
