@@ -12,7 +12,7 @@ export const credentials = {
 
 async function parseImage(club: IClub) {
   const s3LogoObjectUrl = parseUrl(
-    `https://club-central.s3.us-east-2.amazonaws.com/${club._id}.jpg`
+    `https://club-central.s3.us-east-2.amazonaws.com/${club._id}.png`
   );
 
   const presigner = new S3RequestPresigner({
