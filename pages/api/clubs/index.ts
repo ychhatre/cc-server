@@ -77,28 +77,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       const finalClub = await newClub.save();
-      if (req.body.logo) {
-        const buf = Buffer.from(
-          req.body.logo.replace(/^data:image\/jpg;base64,/, ""),
-          "base64"
-        );
-        const params = {
-          Bucket: "club-central",
-          CreateBucketConfiguration: {
-            LocationConstraint: "us-east-2",
-          },
-          Key: `${finalClub._id}.jpg`,
-          ContentEncoding: "base64",
-          ContentType: "image/jpeg",
-          Body: buf,
-        };
+      // if (req.body.logo) {
+      //   const buf = Buffer.from(
+      //     req.body.logo.replace(/^data:image\/jpg;base64,/, ""),
+      //     "base64"
+      //   );
+      //   const params = {
+      //     Bucket: "club-central",
+      //     CreateBucketConfiguration: {
+      //       LocationConstraint: "us-east-2",
+      //     },
+      //     Key: `${finalClub._id}.jpg`,
+      //     ContentEncoding: "base64",
+      //     ContentType: "image/jpeg",
+      //     Body: buf,
+      //   };
 
-        s3.upload(params, function (err, data) {
-          if (err) {
-            throw err;
-          }
-        });
-      }
+      //   s3.upload(params, function (err, data) {
+      //     if (err) {
+      //       throw err;
+      //     }
+      //   });
+      // }
       return res.status(201).send({ club: finalClub });
     } catch (error) {
       return res.status(502).send({ error });
