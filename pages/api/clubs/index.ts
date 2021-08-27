@@ -21,9 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       let finalClubs = [];
       for (var i = 0; i < clubs.length; i++) {
-        if (!Array.from(clubs[i].boardMembers.values()).includes(user)) {
-          finalClubs.push(await parseImage(clubs[i]));
-        }
+        finalClubs.push(await parseImage(clubs[i]));
       }
 
       return res.status(200).send({ clubs: finalClubs });
