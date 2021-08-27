@@ -5,6 +5,8 @@ export default interface IClub extends mongoose.Document {
   name: string;
   description: string;
   room: string;
+  imageURL: string;
+  meetingMinutesURL: string;
   advisor: string;
   boardMembers: Map<string, IUser>;
   members: IUser[] | string[]; 
@@ -27,6 +29,12 @@ var club = new mongoose.Schema({
   room: {
     type: String,
     required: true,
+  },
+  imageURL: {
+    type: String,
+  },
+  meetingMinuteURL: {
+    type: String,
   },
   advisor: {
     type: String,
