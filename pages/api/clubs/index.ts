@@ -4,9 +4,6 @@ import mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 import IUser, { User } from "../../../models/user";
 import { parseImage } from "../../../utils/imageParser";
-import { credentials } from "../../../utils/imageParser";
-import AWS from "aws-sdk";
-const s3 = new AWS.S3(credentials);
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == "GET") {
@@ -19,31 +16,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           $in: [`${mongoose.Types.ObjectId(user._id)}`],
         },
       });
+      console.log("THIS FUNCTION IS PRINTING"); 
       let finalClubs = [];
       for (var i = 0; i < clubs.length; i++) {
         finalClubs.push(await parseImage(clubs[i]));
       }
-
+      
       return res.status(200).send({ clubs: finalClubs });
     } else if (req.query.notMemberID) {
+      let finalClubs:IClub[] = [];
       const user: IUser = await User.findOne({
         uid: req.query.notMemberID.toString(),
       });
+      
       const clubs: IClub[] = await Club.find({
         approved: true,
         members: {
           $nin: [`${mongoose.Types.ObjectId(user._id)}`],
         },
-        boardMembers: {
-          $nin: [`${mongoose.Types.ObjectId(user._id)}`],
-        },
       });
-
-      let finalClubs = [];
-      for (var i = 0; i < clubs.length; i++) {
-        finalClubs.push(await parseImage(clubs[i]));
+      
+      for(let club of clubs) {
+        if(!Object.values(club.boardMembers).includes(user.id)) {
+          finalClubs.push(await parseImage(club)); 
+        }
       }
-
       return res.status(200).send({ clubs: finalClubs });
     }
   } else if (req.method == "POST") {
