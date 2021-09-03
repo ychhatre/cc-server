@@ -12,6 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         uid: req.query.memberID.toString(),
       });
       const clubs: IClub[] = await Club.find({
+        approved: true,
         members: {
           $in: [`${mongoose.Types.ObjectId(user._id)}`],
         },
