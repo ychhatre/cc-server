@@ -45,7 +45,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method == "POST") {
     try {
-      
+
       const studentCreator: IUser = await User.findOne({
         uid: req.body.studentCreator,
       });
@@ -73,7 +73,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: [mongoose.Types.ObjectId(studentCreator._id)],
         timestamp: Date.now() / 1000,
         tags: req.body.tags,
-        creator: studentCreator._id,
+        creator: mongoose.Types.ObjectId(studentCreator._id),
         meetingMinutesURL: req.body.meetingMinutesURL
       });
 
