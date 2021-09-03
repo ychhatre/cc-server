@@ -62,7 +62,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
       console.log("Iterator: ", req.body.boardMembers); 
       let members = new Set(req.body.boardMembers)
-      
+      let finalMembers = members.values(); 
+      console.log(finalMembers); 
       
       const newClub = new Club({
         name: req.body.name,
@@ -72,7 +73,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         school: mongoose.Types.ObjectId(req.body.schoolID),
         approved: false,
         meetingTime: req.body.meetingTime,
-        memberCount: Array.from(members).length,
+        memberCount: Array.from(finalMembers).length,
         boardMembers: req.body.boardMembers,
         members: 4,
         timestamp: Date.now() / 1000,
@@ -85,6 +86,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       
       return res.status(201).send({ club: finalClub });
     } catch (error) {
+      console.log(error); 
       return res.status(502).send({ error });
     }
   }
