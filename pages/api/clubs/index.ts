@@ -60,9 +60,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         req.body.boardMembers[k] = user._id;
       }
+      console.log("Iterator: ", req.body.boardMembers); 
       let members = new Set(req.body.boardMembers)
       let iterator = members.values(); 
-      console.log("Iterator:", iterator); 
+      
       const newClub = new Club({
         name: req.body.name,
         description: req.body.description,
