@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       await sgMail.send({
         to: club.creator.email,
         from: "dambrosiomichael@dublinusd.org",
-        subject: req.body.subject,
+        subject: `Your Club: ${club.name} has been rejected`,
         text: req.body.message,
       });
       await Club.deleteOne({_id: id })
