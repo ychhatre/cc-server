@@ -17,35 +17,35 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           $in: [`${mongoose.Types.ObjectId(user._id)}`],
         },
       });
-      console.log("THIS FUNCTION IS PRINTING"); 
       let finalClubs = [];
       for (var i = 0; i < clubs.length; i++) {
         finalClubs.push(await parseImage(clubs[i]));
       }
-      
+
       return res.status(200).send({ clubs: finalClubs });
     } else if (req.query.notMemberID) {
-      let finalClubs:IClub[] = [];
+      let finalClubs: IClub[] = [];
       const user: IUser = await User.findOne({
         uid: req.query.notMemberID.toString(),
       });
-      
+
       const clubs: IClub[] = await Club.find({
         approved: true,
         members: {
           $nin: [`${mongoose.Types.ObjectId(user._id)}`],
         },
       });
-      
-      for(let club of clubs) {
-        if(!Object.values(club.boardMembers).includes(user.id)) {
-          finalClubs.push(await parseImage(club)); 
+
+      for (let club of clubs) {
+        if (!Object.values(club.boardMembers).includes(user.id)) {
+          finalClubs.push(await parseImage(club));
         }
       }
       return res.status(200).send({ clubs: finalClubs });
     }
   } else if (req.method == "POST") {
     try {
+      
       const studentCreator: IUser = await User.findOne({
         uid: req.body.studentCreator,
       });
@@ -73,31 +73,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: [mongoose.Types.ObjectId(studentCreator._id)],
         timestamp: Date.now() / 1000,
         tags: req.body.tags,
+        creator: studentCreator._id,
+        meetingMinutesURL: req.body.meetingMinutesURL
       });
 
       const finalClub = await newClub.save();
-      // if (req.body.logo) {
-      //   const buf = Buffer.from(
-      //     req.body.logo.replace(/^data:image\/jpg;base64,/, ""),
-      //     "base64"
-      //   );
-      //   const params = {
-      //     Bucket: "club-central",
-      //     CreateBucketConfiguration: {
-      //       LocationConstraint: "us-east-2",
-      //     },
-      //     Key: `${finalClub._id}.jpg`,
-      //     ContentEncoding: "base64",
-      //     ContentType: "image/jpeg",
-      //     Body: buf,
-      //   };
-
-      //   s3.upload(params, function (err, data) {
-      //     if (err) {
-      //       throw err;
-      //     }
-      //   });
-      // }
+      
       return res.status(201).send({ club: finalClub });
     } catch (error) {
       return res.status(502).send({ error });
