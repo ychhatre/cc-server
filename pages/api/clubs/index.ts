@@ -60,8 +60,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         req.body.boardMembers[k] = user._id;
       }
-      let members = new Set(req.body.boardMembers)
-      let iterator = members.values(); 
+      // let members = new Set(req.body.boardMembers)
+      // let iterator = members.values(); 
       
       const newClub = new Club({
         name: req.body.name,
@@ -71,9 +71,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         school: mongoose.Types.ObjectId(req.body.schoolID),
         approved: false,
         meetingTime: req.body.meetingTime,
-        memberCount: Array.from(iterator).length,
+        // memberCount: Array.from(iterator).length,
         boardMembers: req.body.boardMembers,
-        members: members,
+        members: 4,
         timestamp: Date.now() / 1000,
         tags: req.body.tags,
         creator: mongoose.Types.ObjectId(studentCreator._id),
