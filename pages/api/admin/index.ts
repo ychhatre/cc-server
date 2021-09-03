@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         memberCount: { $gte: 10 },
       });
       let finalClubs = []; 
-      console.log(clubs.length); 
+      
       for(var i = 0; i < clubs.length; i++){
         finalClubs.push(await parseImage(clubs[i]))
       }

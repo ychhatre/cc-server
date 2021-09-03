@@ -42,7 +42,7 @@ async function parseImage(club: IClub) {
   club.imageURL = logoUrl;
   club.meetingMinutesURL = meetingMinutesUrl;
 
-  console.log(club);
+  
   return club;
 }
 

@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       } else {
         return res
           .status(502)
-          .send({ status: "The user has already liked the clu!" });
+          .send({ status: "The user has already liked the club!" });
       }
     } catch (error) {
       console.log(error);
