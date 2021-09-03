@@ -45,7 +45,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method == "POST") {
     try {
-
       const studentCreator: IUser = await User.findOne({
         uid: req.body.studentCreator,
       });
@@ -60,11 +59,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         req.body.boardMembers[k] = user._id;
       }
-      console.log("Iterator: ", req.body.boardMembers); 
-      let members = new Set(req.body.boardMembers)
-      let finalMembers = members.values(); 
-      console.log(finalMembers); 
       
+      let ids = Object.values(req.body.boardMembers).map(id => id.toString());
+      let members = Array.from(new Set(ids));
+      // console.log(members);
+
       const newClub = new Club({
         name: req.body.name,
         description: req.body.description,
@@ -73,20 +72,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         school: mongoose.Types.ObjectId(req.body.schoolID),
         approved: false,
         meetingTime: req.body.meetingTime,
-        memberCount: Array.from(finalMembers).length,
+        memberCount: members.length,
         boardMembers: req.body.boardMembers,
-        members: 4,
+        members: members.map((member: string) =>
+          mongoose.Types.ObjectId(member)
+        ),
         timestamp: Date.now() / 1000,
         tags: req.body.tags,
         creator: mongoose.Types.ObjectId(studentCreator._id),
-        meetingMinutesURL: req.body.meetingMinutesURL
+        meetingMinutesURL: req.body.meetingMinutesURL,
       });
-      console.log("club:", newClub); 
+      console.log("club:", newClub);
       const finalClub = await newClub.save();
-      
+
       return res.status(201).send({ club: finalClub });
     } catch (error) {
-      console.log(error); 
+      console.log(error);
       return res.status(502).send({ error });
     }
   }
