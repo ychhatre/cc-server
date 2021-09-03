@@ -15,6 +15,7 @@ export default interface IClub extends mongoose.Document {
   meetingTime: string;
   memberCount: number
   tags: string[]
+  creator: IUser
 }
 
 var club = new mongoose.Schema({
@@ -80,6 +81,11 @@ var club = new mongoose.Schema({
   tags: {
     required: true, 
     type: [String]
+  },
+  creator: {
+    required: true,
+    type: mongoose.Types.ObjectId,
+    ref: "User"
   }
 });
 export const Club = mongoose.models.Club || mongoose.model<IClub>("Club", club);
