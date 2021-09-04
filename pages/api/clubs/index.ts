@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: {
           $in: [`${mongoose.Types.ObjectId(user._id)}`],
         },
-      }).populate({path: "boardMembers", model: "User", select: ['name', 'email']}); 
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email', 'uid']}); 
         
       let finalClubs = [];
       console.log(Object.entries(clubs[0].boardMembers))
@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: {
           $nin: [`${mongoose.Types.ObjectId(user._id)}`],
         },
-      }).populate({path: "boardMembers", model: "User", select: ['name', 'email']});
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email', 'uid']});
 
       for (let club of clubs) {
         if (!Object.values(club.boardMembers).includes(user.id)) {
