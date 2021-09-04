@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import IUser, { User } from "../../../models/user";
+
 import IClub, { Club } from "../../../models/club";
 import dbConnect from "../../../utils/dbConnect";
 import { parseImage } from "../../../utils/imageParser";
