@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
 
   if (req.method == "GET") {
-    const club = await Club.findById(id.toString()).populate("creator");
+    const club = await Club.findById(id.toString()).populate({path: "boardMembers", model: "User", select: ['name', 'email']});
     console.log(club); 
     const finalClub = await parseImage(club);
 

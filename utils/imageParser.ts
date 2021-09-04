@@ -25,22 +25,22 @@ async function parseImage(club: IClub) {
     await presigner.presign(new HttpRequest(s3LogoObjectUrl))
   );
 
-  const s3LogoObjectUrlMeetingMinutes = parseUrl(
-    `https://club-central.s3.us-east-2.amazonaws.com/${club._id}_min.pdf`
-  );
+  // const s3LogoObjectUrlMeetingMinutes = parseUrl(
+  //   `https://club-central.s3.us-east-2.amazonaws.com/${club._id}_min.pdf`
+  // );
 
-  const presignerMeetingMinutes = new S3RequestPresigner({
-    credentials,
-    region: "us-east-2",
-    sha256: Hash.bind(null, "sha256"),
-  });
+  // const presignerMeetingMinutes = new S3RequestPresigner({
+  //   credentials,
+  //   region: "us-east-2",
+  //   sha256: Hash.bind(null, "sha256"),
+  // });
 
-  const meetingMinutesUrl = formatUrl(
-    await presigner.presign(new HttpRequest(s3LogoObjectUrlMeetingMinutes))
-  );
+  // const meetingMinutesUrl = formatUrl(
+  //   await presigner.presign(new HttpRequest(s3LogoObjectUrlMeetingMinutes))
+  // );
   // console.log(logoUrl);
   club.imageURL = logoUrl;
-  club.meetingMinutesURL = meetingMinutesUrl;
+  // club.meetingMinutesURL = meetingMinutesUrl;
 
   
   return club;

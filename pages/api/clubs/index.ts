@@ -16,14 +16,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: {
           $in: [`${mongoose.Types.ObjectId(user._id)}`],
         },
-      }).populate("boardMembers.$*.president");
-      // for (let club of clubs) {
-      //   console.log(club.populate("boardMembers.$*")); 
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email']}); 
         
-      // }
       let finalClubs = [];
-      for (var i = 0; i < clubs.length; i++) {
-        finalClubs.push(await parseImage(clubs[i]));
+      console.log(Object.entries(clubs[0].boardMembers))
+      for (let club of clubs) {
+        finalClubs.push(await parseImage(club));
       }
 
       return res.status(200).send({ clubs: finalClubs });
@@ -38,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         members: {
           $nin: [`${mongoose.Types.ObjectId(user._id)}`],
         },
-      }).populate("boardMembers");
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email']});
 
       for (let club of clubs) {
         if (!Object.values(club.boardMembers).includes(user.id)) {
