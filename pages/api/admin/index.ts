@@ -10,7 +10,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const clubs: IClub[] = await Club.find({
         approved: true,
         memberCount: { $gte: 10 },
-      });
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email', 'uid']});
       let finalClubs = []; 
       
       for(var i = 0; i < clubs.length; i++){
@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else if (req.query.clubStatus === "notApproved") {
       const clubs: IClub[] = await Club.find({
         approved: false,
-      });
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email', 'uid']});
       let finalClubs = []
       for(var i = 0; i < clubs.length; i++){
         finalClubs.push(await parseImage(clubs[i]))
@@ -30,7 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const clubs: IClub[] = await Club.find({
         approved: true,
         memberCount: { $lt: 10 },
-      });
+      }).populate({path: "boardMembers", model: "User", select: ['name', 'email', 'uid']});
       let finalClubs = []
       for(var i = 0; i < clubs.length; i++){
         finalClubs.push(await parseImage(clubs[i]))
