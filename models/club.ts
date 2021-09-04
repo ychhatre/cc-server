@@ -34,7 +34,7 @@ var club = new mongoose.Schema({
   imageURL: {
     type: String,
   },
-  meetingMinuteURL: {
+  meetingMinutesURL: {
     type: String,
   },
   advisor: {
