@@ -44,7 +44,8 @@ var club = new mongoose.Schema({
   boardMembers: {
     required: true,
     type: Map,
-    of: mongoose.Types.ObjectId
+    of: mongoose.Types.ObjectId,
+    ref: "User"
   },
   members: {
     required: true,
