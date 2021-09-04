@@ -13,7 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         subject: `Your Club: ${club.name} has been rejected`,
         text: req.body.message,
       });
-      await Club.deleteOne({_id: id })
+      await Club.deleteOne({_id: club._id })
       return res.status(201).send({"status": "success"})
     } catch (error) {
 	console.log(error);
