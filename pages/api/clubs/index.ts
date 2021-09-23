@@ -56,7 +56,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
         if (!user) {
           return res.status(502).send({
-            error: `The requested user with the email: ${v} does not exist, please try again with an email address that exists`,
+            error: `The requested user with the email: ${v} does not exist. If you are sure that the user's email address is correct please ask them to create an account on the club central app and retry the application process!`,
           });
         }
         req.body.boardMembers[k] = user._id;
