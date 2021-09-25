@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           { _id: req.body.clubID },
           {
             $pull: {
-              members: [mongoose.Types.ObjectId(currentUser._id)],
+              members: currentUser._id,
             },
             $inc: {
               memberCount: -1,
